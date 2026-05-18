@@ -40,7 +40,7 @@ The timeline analysis layer computes per-segment proxy statistics:
 - `response_min`
 - `response_max`
 
-When the saved prediction file contains the full array, these can be computed directly for every segment. The current serializer stores global statistics and a small row preview, so only previewed segments have exact row-level stats. Later segments use global fallback values and are marked as approximate.
+When `run_real_tribe_probe.py` succeeds, the serializer now saves compact exact per-segment statistics for every retained segment by default. Timeline analysis should use `--segment-stats` so it does not need the full prediction array and does not fall back to preview/global approximations.
 
 `response_abs_mean` is used as a response-intensity proxy because it summarizes magnitude regardless of positive or negative direction in the predicted response vector.
 
@@ -313,7 +313,8 @@ python src/run_tribe_perception_probe.py \
 python src/run_tribe_perception_probe.py \
   --input examples/resume_sample.txt \
   --real-prediction outputs/sample_real_tribe_prediction_raw.json \
-  --segments outputs/real_tribe_segments_summary.json \
+  --segments outputs/sample_real_tribe_segments_summary.json \
+  --timeline-analysis outputs/sample_tribe_timeline_analysis.json \
   --output-prefix sample_real
 
 python src/compare_perception_sources.py \

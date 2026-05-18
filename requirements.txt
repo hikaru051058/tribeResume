@@ -5,3 +5,4 @@ PyYAML
 pypdf
 python-docx
 pandas
+plotly

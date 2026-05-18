@@ -1,152 +1,125 @@
 # UI Flow
 
+## Current Status
+
+This is a product sketch for the current TRIBE-first perception-report system. Reviewer-agent screens and editing screens are optional downstream views, not the main workflow.
+
 ## Primary User Flow
 
-1. Upload resume.
-2. Choose target role and reader personas.
-3. Optionally add a job description.
-4. Run simulated reviewer analysis.
-5. View first-pass reactions.
-6. Inspect evidence-backed confidence.
-7. Review rewrite suggestions.
-8. Compare versions.
+1. Upload resume or professional document.
+2. Choose target role or document context.
+3. Choose perception source: mock demo or real TRIBE output.
+4. Run perception probe and timeline analysis.
+5. View section-level proxy rankings.
+6. Inspect evidence-backed perception hypotheses.
+7. Optionally compare with reviewer agents.
+8. Optionally generate patch suggestions or compare controlled variants.
 
 ## Screen 1: Upload Resume
 
 ```text
 +------------------------------------------------------+
-| Resume Response Simulator                            |
+| TRIBE Document Perception Report                     |
 +------------------------------------------------------+
-| Upload resume                                        |
+| Upload document                                      |
 |                                                      |
-| [ Drop PDF/DOCX/TXT here                         ]   |
+| [ Drop PDF/DOCX/TXT/MD here                      ]   |
 |                                                      |
 | Target role                                          |
-| [ Backend Software Engineer                      ]   |
+| [ AI backend engineer intern                     ]   |
 |                                                      |
-| Optional job description                             |
-| [ Paste job description...                       ]   |
+| Perception source                                    |
+| [ ] Mock demo only  [x] Real TRIBE outputs            |
 |                                                      |
-| Personas                                             |
-| [x] Recruiter  [x] Engineering Manager  [x] ATS      |
-| [ ] AI/ML Reviewer  [ ] Admissions  [x] Skeptical    |
-|                                                      |
-| [ Analyze Resume ]                                   |
+| [ Generate Perception Report ]                       |
 +------------------------------------------------------+
 ```
 
-## Screen 2: Simulated Reviewer Reactions
+## Screen 2: Proxy Signal Rankings
 
 ```text
 +------------------------------------------------------+
-| Overall Response: Mixed        Confidence: 76%        |
+| EXPERIMENTAL REAL TRIBE MODE                         |
 +------------------------------------------------------+
-| 10-second first impression                            |
-| Relevant backend experience, but impact and ownership |
-| are under-specified for the target role.              |
+| Raw prediction shape: [182, 20484]                    |
+| Retained segments: 182                                |
+| Exact per-segment stats: yes                          |
+| No human was scanned. Not a hiring prediction.        |
 +------------------------------------------------------+
-| Persona reactions                                    |
-|                                                      |
-| Recruiter                 Good      80/100           |
-| Engineering Manager       Mixed     68/100           |
-| Skeptical Reviewer        Mixed     61/100           |
-| ATS Parser                Good      84/100           |
+| Highest Salience                                     |
+| 1 intro                         1.00                 |
+| 2 education/coursework          0.88                 |
++------------------------------------------------------+
+| Highest Cognitive Load Proxy                         |
+| 1 experience                    0.91                 |
+| 2 projects                      0.76                 |
 +------------------------------------------------------+
 ```
 
-## Screen 3: Evidence View
+## Screen 3: Section Signal Detail
 
 ```text
 +------------------------------------------------------+
-| Strongest Signals                                    |
+| Experience                                           |
 +------------------------------------------------------+
-| Production backend experience                        |
-| Evidence: line 22                                    |
-| "Built REST APIs in Node.js and PostgreSQL..."       |
+| salience_proxy: 0.71                                  |
+| position_normalized_salience: 0.84                    |
+| cognitive_load_proxy: 0.91                            |
+| underemphasis_proxy: 0.88                             |
 |                                                      |
-| Clear technical stack                                |
-| Evidence: lines 10-12                                |
+| Evidence phrases                                     |
+| - 130,000+ medical reports                           |
+| - ~30% workload reduction                            |
+| - ~3.4s inference latency                            |
 +------------------------------------------------------+
-| Weak Or Confusing Signals                            |
-+------------------------------------------------------+
-| Vague impact claim                                   |
-| Evidence: line 25                                    |
-| "Improved system performance and user experience"    |
-|                                                      |
-| Missing scale                                        |
-| Evidence: no user count, traffic, team size, or SLA   |
+| Suggestion                                           |
+| Because experience has the highest load proxy,        |
+| inspect whether dense metrics and technologies can    |
+| be split without removing evidence.                   |
 +------------------------------------------------------+
 ```
 
-## Screen 4: Confidence Breakdown
+## Optional Screen: Reviewer Comparison
 
 ```text
 +------------------------------------------------------+
-| Confidence Breakdown                                 |
+| Perception + Reviewer Fusion                         |
 +------------------------------------------------------+
-| Parser confidence              91%                   |
-| Evidence coverage              84%                   |
-| Rubric consistency             79%                   |
-| Persona agreement              68%                   |
-| Required fields                82%                   |
-| Ambiguity score                70%                   |
-| Supported claims               75%                   |
-+------------------------------------------------------+
-| Main reason confidence is not higher:                 |
-| Several important claims lack metrics, scope, or      |
-| ownership evidence.                                  |
+| Agreement                                             |
+| - Experience: high load proxy and reviewer concern    |
+|   about dense AI/backend evidence.                    |
+|                                                      |
+| Disagreement                                          |
+| - Skills: lower TRIBE signal but reviewer finds       |
+|   keyword coverage useful.                            |
 +------------------------------------------------------+
 ```
 
-## Screen 5: Rewrite Suggestions
+## Optional Screen: Patch Suggestions
 
 ```text
 +------------------------------------------------------+
-| Suggested Bullet Rewrite                             |
+| Suggested Bullet Patch                               |
 +------------------------------------------------------+
 | Original                                             |
-| Worked on APIs for onboarding.                       |
+| Built a dense technical system with metrics...        |
 |                                                      |
-| Rewrite                                              |
-| Built and maintained onboarding REST APIs in Node.js  |
-| and PostgreSQL, improving account setup reliability   |
-| for customer support workflows.                      |
+| Proposed                                             |
+| Split the same evidence into a more scannable span... |
 |                                                      |
-| Why this helps                                       |
-| Adds ownership, stack, and product context without    |
-| inventing unsupported metrics.                       |
-|                                                      |
-| [ Accept ] [ Edit ] [ Regenerate ]                   |
-+------------------------------------------------------+
-```
-
-## Screen 6: Version Comparison
-
-```text
-+------------------------------------------------------+
-| Compare Resume Versions                              |
-+------------------------------------------------------+
-| Version A: Original                                  |
-| Version B: Backend-targeted rewrite                  |
-|                                                      |
-| Overall winner: Version B                            |
-|                                                      |
-| Recruiter:              B                            |
-| Engineering Manager:    B                            |
-| Skeptical Reviewer:     A                            |
-| ATS Parser:             B                            |
-|                                                      |
-| Tradeoff                                               |
-| Version B is stronger and clearer, but one rewritten  |
-| bullet may need user verification.                   |
+| Validation                                           |
+| Risk: low                                            |
+| Evidence preserved: yes                              |
+| Cross-section evidence: none                          |
+| Entity drift: none                                   |
 +------------------------------------------------------+
 ```
 
 ## UI Principles
 
-- Show persona disagreement instead of hiding it.
-- Keep evidence visible near every judgment.
-- Avoid pretending the system predicts hiring outcomes.
-- Label confidence as evidence support, not certainty of success.
-- Make rewrite risks visible when a suggestion adds specificity.
-
+- Lead with source mode: mock demo or real TRIBE.
+- Show no-human-scan and no-hiring-prediction warnings near the top.
+- Show proxy values and rankings before interpretation text.
+- Keep evidence phrases visible near every suggestion.
+- Prefer "inspect this section" language over automatic edits.
+- Keep reviewer agents, fusion, patching, and rewriting visually optional.

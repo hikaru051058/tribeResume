@@ -15,6 +15,8 @@ The evaluation harness provides a repeatable way to test whether local Ollama re
 
 This still does not prove the system predicts real hiring outcomes.
 
+This harness evaluates the optional reviewer-agent layer, not the core TRIBE perception pipeline. For real TRIBE evaluation, use timeline analysis, mock-vs-real comparison, and controlled variant experiments.
+
 ## Fake Resume Cases
 
 The suite includes four fake resumes in `examples/eval_resumes/`:
@@ -104,4 +106,4 @@ Human labels would allow calibration beyond rule-based checks.
 
 The harness tests output quality and expected behavior on fake resumes. It does not prove real-world hiring prediction, admissions prediction, or recruiter behavior.
 
-TRIBE v2 remains optional stimulus-response analysis and is not part of semantic resume judgment.
+TRIBE v2 is the core experimental perception layer, but it is not part of semantic hiring judgment. Reviewer-agent evaluation and TRIBE perception evaluation should be reported separately.

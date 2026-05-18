@@ -1,5 +1,9 @@
 # Bullet Patch Mode
 
+## Current Scope
+
+Bullet patch mode is an optional downstream tool. The primary workflow is a perception report that tells the user which sections to inspect and why. Patch mode should only suggest manual edits after the user decides to act on those report findings.
+
 ## Why Full Rewrites Are Risky
 
 Full resume rewrites can make a strong technical resume weaker by removing concrete proof: metrics, technologies, company names, project names, dates, and system details. A resume can become cleaner but less credible.

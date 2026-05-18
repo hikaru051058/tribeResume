@@ -1,5 +1,16 @@
 # LLM Agent Design
 
+## Current Role
+
+LLM agents are no longer the core product by themselves. In the current architecture:
+
+- TRIBE v2 or mock TRIBE-style prediction provides the perception proxy signal.
+- Deterministic feature extraction builds section-level rankings.
+- Ollama interprets the proxy signals, cites resume evidence, and optionally simulates reviewer personas for comparison.
+- Patch/rewrite suggestions are optional application-layer outputs.
+
+Agents should never claim that TRIBE predicts hiring outcomes, that real brain scans were performed, or that a proxy value is a resume-quality score.
+
 ## Agent Inputs
 
 Each evaluator agent receives:
@@ -187,4 +198,3 @@ Example weighting for a backend engineering role:
 | Skeptical reviewer | 0.15 |
 | ATS parser | 0.15 |
 | General HR reader | 0.10 |
-

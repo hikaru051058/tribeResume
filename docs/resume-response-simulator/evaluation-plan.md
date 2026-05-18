@@ -2,11 +2,33 @@
 
 ## Goal
 
-The system is useful only if its simulated reactions help users make better document decisions. Evaluation should measure usefulness, calibration, evidence quality, and agreement with real reviewers.
+The system is useful only if its perception reports help users make better document inspection decisions. Evaluation should measure source transparency, section-level evidence quality, proxy stability, and usefulness. It should not claim hiring-outcome prediction.
+
+The current evaluation priority is:
+
+1. Validate parser and section-boundary correctness.
+2. Compare mock and real TRIBE proxy rankings to confirm mock is only a development stand-in.
+3. Run controlled variants that preserve facts while changing wording.
+4. Check whether section-level proxy changes are stable enough to inspect.
+5. Compare optional reviewer-agent feedback as a separate semantic layer.
+
+## Real TRIBE Signal Evaluation
+
+Real TRIBE evaluation should inspect:
+
+- Prediction shape and retained segment count.
+- Whether exact per-segment statistics are available.
+- Whether section mapping is plausible.
+- Whether raw salience is dominated by early-position effects.
+- Whether position-normalized salience changes the interpretation.
+- Whether short sections produce unstable proxy swings.
+- Whether controlled variants preserve facts.
+
+This evaluates pipeline behavior, not actual perception.
 
 ## Human Reviewer Comparison
 
-Collect reviews from real people matching target personas:
+Optional later work can collect reviews from real people matching target personas:
 
 - Recruiters.
 - Engineering managers.
@@ -31,7 +53,7 @@ reviewer_agreement = matching_major_findings / total_major_findings
 
 ## A/B Resume Rewrite Testing
 
-Test whether suggested rewrites improve human response.
+This is optional and downstream. Before testing rewrites, prefer controlled text variants that preserve facts and compare real TRIBE-derived proxy signals.
 
 Protocol:
 
@@ -137,4 +159,3 @@ Measures invented facts or unsupported claims.
 ```text
 hallucination_rate = unsupported_generated_claims / total_generated_claims
 ```
-

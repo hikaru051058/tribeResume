@@ -1,5 +1,9 @@
 # Local Model Comparison
 
+## Scope
+
+These benchmarks apply to optional Ollama reviewer-agent comparison, not the core TRIBE perception pipeline. The primary report workflow starts from TRIBE/mock perception features and uses Ollama for interpretation or comparison.
+
 ## Benchmark Summary
 
 Local test on `examples/resume_sample.txt`:

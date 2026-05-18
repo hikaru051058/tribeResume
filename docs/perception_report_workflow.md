@@ -47,19 +47,29 @@ python src/run_real_tribe_probe.py \
   --device cpu \
   --feature-device cpu \
   --event-format canonical \
-  --output outputs/sample_real_tribe_prediction_raw.json \
+  --output-prefix sample \
   --verbose-errors
+
+python src/run_tribe_timeline_analysis.py \
+  --input examples/resume_sample.txt \
+  --prediction outputs/sample_real_tribe_prediction_raw.json \
+  --segments outputs/sample_real_tribe_segments_summary.json \
+  --segment-stats outputs/sample_real_tribe_segment_stats.json \
+  --events outputs/sample_real_tribe_events_canonical.csv \
+  --output outputs/sample_tribe_timeline_analysis.json
 
 python src/run_tribe_perception_probe.py \
   --input examples/resume_sample.txt \
   --real-prediction outputs/sample_real_tribe_prediction_raw.json \
-  --segments outputs/real_tribe_segments_summary.json
+  --segments outputs/sample_real_tribe_segments_summary.json \
+  --timeline-analysis outputs/sample_tribe_timeline_analysis.json \
+  --output-prefix sample_real
 ```
 
 This creates real-source feature files:
 
-- `outputs/tribe_perception_features.json`
-- `outputs/tribe_perception_hypotheses.json`
+- `outputs/sample_real_tribe_perception_features.json`
+- `outputs/sample_real_tribe_perception_hypotheses.json`
 
 The source is marked `real_tribe`, with this caution:
 
@@ -86,6 +96,7 @@ The output may support hypotheses about:
 The main report should expose the actual proxy values per section instead of hiding them behind prose:
 
 - `salience_proxy`
+- `position_normalized_salience`
 - `cognitive_load_proxy`
 - `underemphasis_proxy`
 - `response_intensity`

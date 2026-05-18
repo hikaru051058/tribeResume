@@ -2,6 +2,8 @@
 
 This example uses the fake resume in `examples/resume_sample.txt`. It is simulated evaluator feedback, not a prediction of real hiring outcomes.
 
+Ollama output is optional comparison/explanation data. It is not the core perception signal. The primary report should start from TRIBE/mock perception features, then use Ollama only to interpret or compare.
+
 ## Persona Result Example
 
 ```json
@@ -90,4 +92,3 @@ This example uses the fake resume in `examples/resume_sample.txt`. It is simulat
   }
 }
 ```
-

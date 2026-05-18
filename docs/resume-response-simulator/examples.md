@@ -1,5 +1,33 @@
 # Examples
 
+## Current Example Type
+
+The primary example output should be a perception report, not a rewritten resume. Reviewer-agent output and bullet rewrites are optional comparison/application examples.
+
+## Sample Perception Signal Output
+
+```json
+{
+  "metadata": {
+    "perception_source": "real_tribe",
+    "caution": "Real TRIBE checkpoint output from synthetic reading events; no human was scanned."
+  },
+  "proxy_rankings": {
+    "highest_cognitive_load_proxy": [
+      {"section": "experience", "value": 0.91}
+    ]
+  },
+  "deterministic_insights": [
+    {
+      "section": "experience",
+      "signal_type": "highest_cognitive_load_proxy",
+      "interpretation": "This section may be dense or hard to scan.",
+      "suggestion": "Inspect whether metrics and technologies can be split without removing evidence."
+    }
+  ]
+}
+```
+
 ## Sample Resume Snippet
 
 ```text
@@ -42,7 +70,9 @@
 }
 ```
 
-## Before And After Bullet Rewrites
+## Optional Before And After Bullet Rewrites
+
+Patch/rewrite examples are optional. They must preserve evidence and avoid cross-section borrowing.
 
 ### Example 1: Backend API Bullet
 
@@ -178,4 +208,3 @@ Simulated response:
   "why_confidence_is_high": "Most claims include concrete evidence: system, scale, technical method, and outcome."
 }
 ```
-

@@ -1,5 +1,9 @@
 # Rewrite And Compare Loop
 
+## Current Scope
+
+Rewrite and compare tools are optional experimental editing tools. They are not the primary workflow. The main product is the TRIBE-derived perception report, which produces inspection priorities and suggestions rather than automatic edits.
+
 ## Why Reviewing Alone Is Not Enough
 
 A review tells the user what is working and what is weak. That is useful, but it does not complete the product loop. A resume-response simulator should also help the user produce a better draft and test whether the new version changes simulated reader response.

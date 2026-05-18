@@ -2,7 +2,18 @@
 
 ## Overview
 
-The API should support uploading resumes, running persona analyses, comparing versions, rewriting bullets, matching jobs, and fetching stored analyses.
+This is a future API sketch. The current implementation is CLI-first and TRIBE-first.
+
+The API should prioritize the current perception-report workflow:
+
+1. Upload and parse a document.
+2. Build synthetic reading events.
+3. Attach or generate TRIBE prediction artifacts.
+4. Run timeline and section-level feature extraction.
+5. Generate a cautious perception report.
+6. Optionally run reviewer-agent comparison, fusion, patch suggestions, or variant comparison.
+
+Persona analyses, rewriting, and job matching are optional application-layer endpoints, not the core product.
 
 ## Data Models
 
@@ -26,9 +37,35 @@ The API should support uploading resumes, running persona analyses, comparing ve
   "analysis_id": "ana_123",
   "resume_id": "res_123",
   "target_role": "Backend Software Engineer",
-  "overall_response": "Good",
-  "confidence_score": 0.82,
+  "analysis_type": "perception_report",
+  "perception_source": "real_tribe",
+  "prediction_shape": [182, 20484],
   "created_at": "2026-05-17T10:32:00Z"
+}
+```
+
+### Perception Report
+
+```json
+{
+  "report_id": "per_123",
+  "resume_id": "res_123",
+  "perception_source": "real_tribe",
+  "important_caution": [
+    "Real TRIBE checkpoint output from synthetic reading events.",
+    "No human was scanned.",
+    "This is not a hiring prediction."
+  ],
+  "section_level_signals": [
+    {
+      "section": "experience",
+      "salience_proxy": 0.71,
+      "position_normalized_salience": 0.84,
+      "cognitive_load_proxy": 0.91,
+      "underemphasis_proxy": 0.88,
+      "evidence_phrases": ["130,000+ reports", "~30% workload reduction"]
+    }
+  ]
 }
 ```
 
@@ -72,7 +109,7 @@ Response:
 
 ## POST /v1/resumes/analyze
 
-Analyze a resume with selected personas.
+Generate the primary perception analysis for a resume.
 
 Request:
 
@@ -80,14 +117,9 @@ Request:
 {
   "resume_id": "res_123",
   "target_role": "Backend Software Engineer",
-  "job_description": "We are looking for a backend engineer...",
-  "personas": [
-    "technical_recruiter",
-    "software_engineering_manager",
-    "skeptical_reviewer",
-    "ats_parser"
-  ],
-  "include_rewrites": true
+  "perception_source": "real_tribe",
+  "timeline_analysis_id": "timeline_123",
+  "include_reviewer_comparison": false
 }
 ```
 
@@ -96,27 +128,23 @@ Response:
 ```json
 {
   "analysis_id": "ana_123",
-  "overall_response": "Mixed",
-  "confidence_score": 0.76,
-  "persona_results": [
+  "perception_source": "real_tribe",
+  "confidence": {
+    "text_review_confidence": null,
+    "perception_signal_confidence": 0.5,
+    "fusion_confidence": null
+  },
+  "proxy_rankings": {
+    "highest_cognitive_load_proxy": [
+      {"section": "experience", "value": 0.91}
+    ]
+  },
+  "section_level_signals": [
     {
-      "persona": "technical_recruiter",
-      "overall_response": "Good",
-      "role_fit_score": 80,
-      "first_impression_10_seconds": "Likely screenable, with relevant backend keywords and clear experience."
-    },
-    {
-      "persona": "software_engineering_manager",
-      "overall_response": "Mixed",
-      "role_fit_score": 68,
-      "first_impression_10_seconds": "Relevant work is present, but ownership and production impact are under-specified."
-    }
-  ],
-  "top_findings": [
-    {
-      "type": "weak_signal",
-      "message": "Several bullets describe tasks without measurable outcomes.",
-      "evidence_lines": [24, 28, 31]
+      "section": "experience",
+      "signal_type": "high_cognitive_load_proxy",
+      "evidence_phrases": ["130,000+ reports", "~30% workload reduction"],
+      "suggestion": "Inspect whether dense metrics and technologies can be split without removing evidence."
     }
   ]
 }
@@ -124,7 +152,7 @@ Response:
 
 ## POST /v1/resumes/compare
 
-Compare multiple resume versions.
+Compare multiple resume versions. In the current framing, comparison should prefer perception proxy and controlled-variant comparisons before making editing recommendations.
 
 Request:
 
@@ -156,7 +184,7 @@ Response:
 
 ## POST /v1/resumes/rewrite
 
-Generate targeted rewrites.
+Generate targeted rewrites. This is optional and should never be the default report behavior.
 
 Request:
 
@@ -165,7 +193,9 @@ Request:
   "resume_id": "res_123",
   "target_role": "Backend Software Engineer",
   "line_ids": [24, 25],
-  "rewrite_goal": "Increase engineering manager confidence without adding unsupported claims"
+  "mode": "surgical",
+  "allow_remove_gpa": false,
+  "rewrite_goal": "Improve scanability without adding or removing concrete evidence"
 }
 ```
 
@@ -179,6 +209,7 @@ Response:
       "original": "Worked on APIs for onboarding.",
       "rewrite": "Built and maintained onboarding REST APIs in Node.js and PostgreSQL, improving account setup reliability for customer support workflows.",
       "requires_user_verification": true,
+      "evidence_removed": [],
       "improvement_reason": "Adds ownership, stack, and product context while avoiding invented metrics."
     }
   ]
@@ -241,4 +272,3 @@ Response:
   "rewrites": []
 }
 ```
-

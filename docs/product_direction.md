@@ -13,12 +13,15 @@ Target flow:
 ```text
 Resume upload
 -> Structured parsing
--> TRIBE-inspired response prediction
+-> Synthetic reading events
+-> TRIBE v2 response prediction
 -> Response feature extraction
 -> Perception hypotheses
 -> LLM explanation
--> Evidence-preserving patching
+-> Suggestion report
 ```
+
+Patch and rewrite tools are optional application-layer experiments. They should not be presented as the main product.
 
 ## Structured Parsing
 
@@ -80,9 +83,11 @@ Useful confidence components:
 - Ambiguity penalties.
 - Unsupported claim penalties.
 
-## Evidence-Preserving Patching
+## Optional Evidence-Preserving Editing
 
 Patch tools should improve the document while preserving concrete proof. For strong technical resumes, targeted bullet patches are safer than full rewrites.
+
+Editing tools should remain downstream from the perception report. The report should first tell the user what to inspect and why; it should not automatically rewrite or apply changes.
 
 ## Why ChatGPT Is Better For One-Off Use
 
@@ -94,9 +99,10 @@ This product only becomes valuable if it adds structure that a one-off prompt do
 - Evidence-cited findings.
 - Version comparison.
 - Role-specific scoring.
-- Confidence breakdowns.
+- Confidence breakdowns that separate text-review confidence, perception-signal confidence, and fusion confidence.
 - Disagreement analysis between reviewer types.
 - Stored history across resume iterations.
+- TRIBE-derived timeline and section proxy signals.
 
 ## Why A Structured Multi-Reviewer Simulator May Still Be Valuable
 
@@ -109,3 +115,5 @@ A structured simulator helps when users need to understand how the same resume l
 - A startup founder may value broader project ownership.
 
 The product should preserve those differences instead of flattening them into one generic score.
+
+The current differentiator is no longer just multi-reviewer simulation. The differentiator is the combination of real TRIBE-derived stimulus-response-like output, section-level proxy analysis, cautious LLM interpretation, and optional reviewer-agent comparison.

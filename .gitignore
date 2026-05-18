@@ -18,13 +18,22 @@ cache*/
 # Generated outputs. Keep only the placeholder so the directory exists.
 outputs/*
 !outputs/.gitkeep
+outputs/*.npz
+outputs/*prediction_full*.npz
+outputs/*real_tribe_prediction_raw.json
+outputs/*real_tribe_segment_stats.json
+outputs/*events_canonical.csv
+outputs/*probe_diagnostics.json
+outputs/*segments.pkl
+outputs/visualizations/
 
 # Local notebooks and external checkouts
 tribe_demo.ipynb
 tribev2/
 
 # Private local resumes/documents
-HIKARU_SHIMADA_FlowCV_Resume_2026-05-17.pdf
+*_FlowCV_Resume_*.pdf
+*Resume*.pdf
 *.pdf
 !docs/**/*.pdf
 

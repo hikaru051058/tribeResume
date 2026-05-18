@@ -41,7 +41,19 @@ python src/run_real_tribe_probe.py \
 Dry run writes:
 
 - `outputs/real_tribe_events.json`
+- `outputs/real_tribe_events_dataframe.csv`
+- `outputs/real_tribe_events_canonical.csv` when canonical mode succeeds
 - `outputs/real_tribe_probe_diagnostics.json`
+
+Use `--output-prefix` to avoid mixing sample, full-resume, and variant outputs:
+
+```bash
+python src/run_real_tribe_probe.py \
+  --input path/to/resume.pdf \
+  --dry-run \
+  --event-format canonical \
+  --output-prefix sample
+```
 
 ## Real Probe
 
@@ -52,7 +64,9 @@ python src/run_real_tribe_probe.py \
   --input path/to/resume.pdf \
   --cache-folder ./cache_probe \
   --device cpu \
-  --output outputs/real_tribe_prediction_raw.json
+  --feature-device cpu \
+  --event-format canonical \
+  --output-prefix sample
 ```
 
 The script attempts:
@@ -61,7 +75,7 @@ The script attempts:
 model.predict(events)
 ```
 
-The current event format is experimental and may not match the real TRIBE text pipeline.
+The current event format is experimental and may not match the real TRIBE text pipeline. `--output-prefix sample` writes `outputs/sample_real_tribe_*` files so generated artifacts do not overwrite each other.
 
 ## Canonical Word Event Path
 
@@ -115,13 +129,23 @@ This writes:
 - `outputs/real_tribe_events_canonical.csv` if canonical transforms succeed
 - `outputs/real_tribe_probe_diagnostics.json`
 
+With `--output-prefix sample`, these become:
+
+- `outputs/sample_real_tribe_events_dataframe.csv`
+- `outputs/sample_real_tribe_events_canonical.csv`
+- `outputs/sample_real_tribe_probe_diagnostics.json`
+
 This is still experimental and may not match TRIBE's training distribution. Synthetic resume-reading events are a probe input, not a validated neuroscience measurement.
 
 ## Outputs
 
 - `outputs/real_tribe_events.json`: synthetic word events.
 - `outputs/real_tribe_prediction_raw.json`: JSON-safe prediction output or structural summary.
+- `outputs/real_tribe_segment_stats.json`: compact exact per-segment prediction statistics when prediction succeeds.
+- `outputs/real_tribe_segments_summary.json`: retained TR/time segment metadata.
 - `outputs/real_tribe_probe_diagnostics.json`: model loading, prediction, environment, and serialization diagnostics.
+
+Generated outputs are ignored by git. Do not commit real resume reports, raw TRIBE outputs, segment statistics, cache files, or personal PDFs unless they have been intentionally sanitized.
 
 ## Expected Blockers
 
@@ -171,6 +195,7 @@ python src/run_real_tribe_probe.py \
   --cache-folder ./cache_probe \
   --device cpu \
   --feature-device cpu \
+  --output-prefix sample \
   --verbose-errors
 ```
 
@@ -194,7 +219,8 @@ python src/run_real_tribe_probe.py \
   --event-format canonical \
   --cache-folder ./cache_probe \
   --device cpu \
-  --output outputs/real_tribe_prediction_raw.json \
+  --feature-device cpu \
+  --output-prefix sample \
   --text-model-override unsloth/Llama-3.2-3B-Instruct \
   --verbose-errors
 ```

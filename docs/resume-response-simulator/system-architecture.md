@@ -2,28 +2,28 @@
 
 ## Overview
 
-The system has two main responsibilities:
+Current implementation has three main responsibilities:
 
-1. Convert a resume into reliable structured evidence.
-2. Simulate evaluator reactions using personas, rubrics, and confidence scoring.
+1. Convert a resume/document into normalized text and canonical synthetic reading events.
+2. Run TRIBE v2 or mock TRIBE-style prediction and extract section-level perception proxy signals.
+3. Explain those signals with cautious, evidence-backed reports and optional reviewer-agent comparison.
 
-TRIBE v2-style analysis is optional and experimental. It can analyze the document as a stimulus, but should not be the source of hiring or admissions judgment.
+TRIBE v2 is now the core experimental perception-simulation layer. It is still not a hiring or admissions judgment model. Ollama reviewer agents are optional comparison/explanation tools, not the core system by themselves.
 
 ## High-Level Pipeline
 
 ```mermaid
 flowchart LR
     A[Resume Upload] --> B[Parser]
-    B --> C[Text + Layout Extraction]
-    C --> D[Structured Candidate Profile]
-    D --> E[Persona Simulation Layer]
-    E --> F[Rubric Scoring Layer]
-    F --> G[Confidence Engine]
-    G --> H[Report Generator]
-    H --> I[Rewrite Engine]
-    H --> J[Version Comparison]
-    C -. optional .-> K[TRIBE v2 Stimulus-Response Layer]
-    K -. attention/load features .-> G
+    B --> C[Text + Section Representation]
+    C --> D[Canonical Word/Text/Sentence Events]
+    D --> E[TRIBE v2 Prediction Or Mock Development Signal]
+    E --> F[Per-Segment Stats]
+    F --> G[Section Timeline Mapping]
+    G --> H[Perception Proxy Features]
+    H --> I[Perception Report]
+    I -. optional .-> J[Reviewer-Agent Comparison]
+    I -. optional .-> K[Patch Suggestions]
 ```
 
 ## Resume Upload And Parser
@@ -60,9 +60,9 @@ Outputs:
 }
 ```
 
-## Structured Extraction
+## Section And Evidence Extraction
 
-The extraction layer creates a normalized candidate profile.
+The extraction layer creates bounded sections and evidence phrases for reporting. It should preserve section boundaries so education/coursework evidence does not leak into experience or project evidence.
 
 Fields:
 
@@ -90,7 +90,28 @@ flowchart TD
     F --> G[Evidence Index]
 ```
 
-## Persona Simulation Layer
+## TRIBE Timeline And Feature Layer
+
+Real TRIBE prediction output is stored as compact summaries:
+
+- Prediction shape.
+- Global response statistics.
+- Exact per-segment statistics when available.
+- Retained segment metadata.
+- Canonical event CSV.
+- Diagnostics and environment metadata.
+
+Timeline analysis maps retained TRIBE time segments to document sections and computes:
+
+- Raw salience proxy.
+- Position-normalized salience.
+- Cognitive-load proxy.
+- Underemphasis proxy.
+- Section duration, segment count, and stability hints.
+
+These values are report signals, not quality scores.
+
+## Optional Persona Simulation Layer
 
 Each persona receives:
 
@@ -151,9 +172,9 @@ flowchart TD
     G --> H[Evidence-Backed Confidence Score]
 ```
 
-## Rewrite Engine
+## Optional Rewrite And Patch Engine
 
-The rewrite engine converts diagnostics into targeted edits.
+Rewrite and patch tools convert diagnostics into suggested edits only when explicitly run. They are not the primary workflow.
 
 Inputs:
 
@@ -191,22 +212,11 @@ flowchart LR
     E --> H[Recommended Hybrid Edits]
 ```
 
-## Optional TRIBE v2 Stimulus-Response Layer
+## Cautions
 
-TRIBE v2 can be treated as an experimental analysis layer for stimulus response, not resume quality.
-
-Potential inputs:
-
-- Rendered resume pages as images/video frames.
-- Text segments.
-- Audio narration of a resume, if used in an experiment.
-
-Potential outputs:
-
-- Attention or salience estimates.
-- Cognitive load proxies.
-- Document density warnings.
-- Version comparison as visual/text stimuli.
-
-These features should be labeled experimental and should not override LLM agent judgment.
-
+- No human is scanned.
+- Synthetic reading events are not natural reading behavior.
+- TRIBE output is not resume quality or hiring prediction.
+- Mock output is development/demo-only.
+- Reviewer-agent output is simulated semantic feedback.
+- Editing tools must preserve factual evidence.

@@ -2,7 +2,13 @@
 
 ## Guiding Principle
 
-Build the semantic reader-response system first. Do not start with TRIBE v2, brain-response modeling, or complex visual experiments. The product must first prove that structured persona simulation is better than a generic resume critique.
+This document was written before the TRIBE-first refactor. The current implementation starts with the perception-report workflow:
+
+```text
+parser -> synthetic reading events -> TRIBE/mock prediction -> feature extraction -> perception report
+```
+
+Persona simulation, rewriting, patching, and comparison are now optional downstream tools.
 
 ## Phase 0: Docs And Examples
 
@@ -24,60 +30,80 @@ Success criteria:
 - A designer can sketch the product flow.
 - A future implementation can use the documented schemas.
 
-## Phase 1: Resume Parser And LLM Agents
+## Phase 1: Parser And Perception Events
 
 Priority: Highest  
 Difficulty: Medium
 
 Deliverables:
 
-- Resume upload endpoint.
 - PDF/DOCX/text parsing.
-- Line-numbered text extraction.
-- Structured candidate profile extraction.
-- Persona agent prompts.
-- Evidence-cited JSON outputs.
-- Basic report UI or API response.
+- Markdown parsing.
+- Bounded section extraction.
+- Synthetic word events.
+- Canonical TRIBE/neuralset DataFrame events.
+- Dry-run diagnostics.
 
 Recommended stack:
 
-- Backend API.
 - Document parser.
-- LLM orchestration layer.
+- Event generator.
+- TRIBE probe wrapper.
 - JSON schema validation.
-- Storage for resume and analysis records.
+- Local output directory with ignored generated artifacts.
 
-## Phase 2: Job-Description Matching
+## Phase 2: Real TRIBE Output Inspection
 
 Priority: High  
 Difficulty: Medium
 
 Deliverables:
 
-- Job description upload or paste.
-- Target role extraction.
-- Role-fit rubric.
-- Gap analysis.
-- Targeted rewrite suggestions.
-- Persona weighting by role.
+- Guarded real TRIBE prediction script.
+- Output serializer with compact per-segment stats.
+- Segment summary and diagnostics.
+- Timeline analysis mapped to document sections.
+- Position-normalized salience heuristic.
+- Markdown timeline report.
 
 Success criteria:
 
-- Same resume can receive different role-fit results for different jobs.
-- Recommendations cite both resume evidence and job requirement evidence.
+- Real TRIBE can run on sample synthetic text events.
+- The report clearly states no human scan and no hiring prediction.
+- Section-level aggregation is inspectable and reproducible.
 
-## Phase 3: Version Comparison
+## Phase 3: Perception Report And Interpretation
+
+Priority: Medium
+Difficulty: Medium
+
+Deliverables:
+
+- Perception interpretation JSON.
+- Markdown perception report.
+- Proxy ranking tables.
+- Evidence phrases per section.
+- Deterministic signal insights.
+- Mock-vs-real source warnings.
+
+## Phase 4: Optional Comparison And Editing
 
 Priority: Medium  
 Difficulty: Medium
 
 Deliverables:
 
-- Compare two or more resume versions.
-- Show winner by persona.
-- Show tradeoffs.
-- Track score changes.
-- Recommend hybrid edits.
+- Ollama reviewer-agent comparison.
+- Perception-review fusion.
+- Bullet patch suggestions.
+- Evidence scope validation.
+- Controlled variant experiments.
+
+Success criteria:
+
+- Optional tools never override the core report.
+- Patch/rewrite output preserves factual evidence.
+- Variant comparison warns about short-section and segment-boundary instability.
 
 Success criteria:
 
@@ -127,4 +153,3 @@ Avoid building these before the core reader-response loop works:
 8. Version comparison.
 9. Additional personas.
 10. Optional TRIBE v2 experiment.
-

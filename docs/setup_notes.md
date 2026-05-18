@@ -64,5 +64,14 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ## Notes
 
-These commands are not required for the current fake-event scaffold. They are required for running the Meta notebook's audio/video/transcription path or for full TRIBE text prediction through the existing feature extractor stack.
+The current app path uses synthetic resume-reading events and the TRIBE text extractor. It does not require the notebook's audio/video/transcription path, but full real TRIBE text prediction still needs Hugging Face access to the configured LLaMA dependency.
 
+Generated outputs and caches are ignored by git:
+
+- `outputs/`
+- `cache_probe/`
+- local resume PDFs
+- local notebooks
+- local TRIBE checkouts
+
+Keep real resumes and generated reports local unless they have been intentionally sanitized.

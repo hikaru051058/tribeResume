@@ -1,10 +1,15 @@
-# Tribe Resume
+# Tribe Resume Documentation
 
-## Project Overview
+## Current Product Framing
 
-This repository is an experimental workspace for a resume-response simulator. The core idea is to test resumes as documents that create different reader responses before a candidate sends them.
+This repository is an experimental document perception-report system. The core idea is to treat a resume or professional document as a stimulus, estimate section-level perception proxy signals, and turn those signals into cautious suggestions.
 
-The long-term product direction is not a normal resume checker. It is a structured simulator that can compare how different evaluators may perceive the same resume, then cite evidence for each judgment.
+The current implementation supports two perception paths:
+
+- `real_tribe`: real TRIBE v2 checkpoint output from synthetic resume-reading events.
+- `mock`: deterministic development values for testing the report pipeline only.
+
+Mock mode is not a meaningful perception signal. It exists for UI, report, and workflow development. Serious experimental reports should use real TRIBE output when available.
 
 ## Core System Philosophy
 
@@ -25,15 +30,22 @@ Ollama is not the core judge. Ollama interprets TRIBE-derived signals and resume
 
 TRIBE v2 does not prove real recruiter decisions or directly judge resume quality. Its output should be treated as an experimental proxy signal.
 
-## Current Local Experiment
+## Current Local Implementation
 
-The current scaffold converts resume text into artificial reading events:
+The current pipeline can:
 
-```text
-resume text -> normalized words -> fake onset/duration/offset events -> JSON
-```
+- Parse TXT, Markdown, DOCX, and text-based PDF resumes.
+- Convert resume text into canonical TRIBE/neuralset `Word`, `Text`, and `Sentence` events.
+- Run dry-run event inspection without loading TRIBE.
+- Run real TRIBE v2 prediction when local Hugging Face access and dependencies are available.
+- Save compact exact per-segment prediction statistics without committing giant arrays.
+- Map retained TRIBE time segments back to resume sections.
+- Generate proxy rankings for salience, position-normalized salience, cognitive-load proxy, and underemphasis proxy.
+- Generate a human-readable perception report with evidence phrases and deterministic signal insights.
+- Optionally compare perception hypotheses with Ollama reviewer-agent feedback.
+- Optionally run controlled variant experiments to test whether proxy signals change when wording changes while facts are preserved.
 
-This lets us inspect the resume as a timed text stimulus without using the notebook's video, audio, text-to-speech, or transcription path.
+The local notebook and TRIBE checkout are not part of the committed app workflow.
 
 ## Real TRIBE Probe
 
@@ -153,6 +165,135 @@ The perception report includes deterministic signal insights generated directly 
 
 The timeline report shows raw prediction shape, retained segments, output dimensions, segment timing, section mapping, and section-level response proxies. These are inspection signals, not resume-quality scores.
 
+## Visualization Workflow
+
+Generate interactive Plotly visualizations from existing JSON outputs:
+
+```bash
+python src/generate_visual_report.py \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --features outputs/hikaru_real_position_tribe_perception_features.json \
+  --variant-comparison outputs/variant_experiments/sem_variant/variant_comparison.json \
+  --output-dir outputs/visualizations
+
+open outputs/visualizations/index.html
+```
+
+This creates:
+
+- `outputs/visualizations/hikaru_timeline.html`
+- `outputs/visualizations/hikaru_section_signals.html`
+- `outputs/visualizations/sem_variant_comparison.html`
+- `outputs/visualizations/index.html`
+
+These visualizations use saved timeline, feature, and variant JSON files. They do not rerun TRIBE and do not need full prediction arrays.
+
+Optional brain heatmap inspection:
+
+```bash
+python src/inspect_tribe_plotting.py
+
+python src/render_brain_timesteps_panel.py \
+  --prediction-full outputs/hikaru_real_tribe_prediction_full.npz \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --start-segment 0 \
+  --n-timesteps 15 \
+  --output outputs/visualizations/brain_first_15.png
+```
+
+Meta-style section window:
+
+```bash
+python src/render_brain_timesteps_panel.py \
+  --prediction-full outputs/hikaru_real_tribe_prediction_full.npz \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --section experience \
+  --section-window peak \
+  --n-timesteps 15 \
+  --output outputs/visualizations/brain_experience_peak.png
+```
+
+Stimulus-label version, if segment objects were saved:
+
+```bash
+python src/render_brain_timesteps_panel.py \
+  --prediction-full outputs/hikaru_real_tribe_prediction_full.npz \
+  --segments-pkl outputs/hikaru_real_tribe_segments.pkl \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --start-segment 0 \
+  --n-timesteps 15 \
+  --show-stimuli \
+  --output outputs/visualizations/brain_first_15.png
+```
+
+Brain heatmaps require full prediction arrays saved with `--save-full-array`. Stimulus labels work best when segment objects are saved with `--save-segment-objects`. If the `.npz`, segment objects, or plotting dependencies are missing, the visualizer falls back to diagnostics or a vertex-value view. HTML vertex line graphs are fallback-only; notebook-like cortical panels should be generated as PNG/SVG/PDF with `render_brain_timesteps_panel.py`.
+
+Interactive timestep slider:
+
+```bash
+python src/render_brain_activity_slider.py \
+  --prediction-full outputs/hikaru_real_tribe_prediction_full.npz \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --events outputs/hikaru_real_tribe_events_canonical.csv \
+  --section experience \
+  --section-window peak \
+  --n-timesteps 15 \
+  --output outputs/visualizations/brain_activity_slider.html
+
+open outputs/visualizations/brain_activity_slider.html
+```
+
+Six-angle slider:
+
+```bash
+python src/render_brain_activity_slider.py \
+  --prediction-full outputs/hikaru_real_tribe_prediction_full.npz \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --events outputs/hikaru_real_tribe_events_canonical.csv \
+  --section experience \
+  --section-window peak \
+  --n-timesteps 15 \
+  --view-preset six \
+  --output outputs/visualizations/brain_activity_slider_6view.html
+
+open outputs/visualizations/brain_activity_slider_6view.html
+```
+
+Pseudo-3D viewer from the six-view frames:
+
+```bash
+python src/build_brain_3d_viewer.py \
+  --slider-diagnostics outputs/visualizations/brain_activity_slider_6view_diagnostics.json \
+  --output outputs/visualizations/brain_3d_viewer.html
+
+open outputs/visualizations/brain_3d_viewer.html
+```
+
+Actual browser 3D cortical mesh viewer:
+
+```bash
+python src/build_brain_mesh_viewer.py \
+  --prediction-full outputs/hikaru_real_tribe_prediction_full.npz \
+  --timeline outputs/hikaru_tribe_timeline_analysis.json \
+  --events outputs/hikaru_real_tribe_events_canonical.csv \
+  --section experience \
+  --section-window peak \
+  --n-timesteps 15 \
+  --value-mode absolute \
+  --colorscale activity \
+  --output outputs/visualizations/brain_mesh_3d_viewer.html
+
+open outputs/visualizations/brain_mesh_3d_viewer.html
+```
+
+Do not commit generated visualization artifacts, full arrays, raw predictions, or segment stats:
+
+- `outputs/*.npz`
+- `outputs/*prediction_full*.npz`
+- `outputs/*segments.pkl`
+- `outputs/*real_tribe_prediction_raw.json`
+- `outputs/*real_tribe_segment_stats.json`
+
 ## Controlled Variant Experiment Workflow
 
 Use controlled variants to test whether real TRIBE-derived proxy signals change when wording changes while facts are preserved.
@@ -205,7 +346,7 @@ python src/generate_demo_report.py \
 
 ## Primary Workflow: Perception Report
 
-Run a TRIBE-style perception probe. Use `--mock` until real TRIBE prediction is explicitly enabled:
+For a development/demo report, run a mock perception probe:
 
 ```bash
 python src/run_tribe_perception_probe.py \
@@ -213,12 +354,25 @@ python src/run_tribe_perception_probe.py \
   --mock
 ```
 
+Mock mode is only for testing the report pipeline. It should not be used to interpret a real document.
+
+For a serious experimental report, first run the real TRIBE probe and timeline analysis from the sections above, then convert those real outputs into perception features:
+
+```bash
+python src/run_tribe_perception_probe.py \
+  --input path/to/resume.pdf \
+  --real-prediction outputs/sample_real_tribe_prediction_raw.json \
+  --segments outputs/sample_real_tribe_segments_summary.json \
+  --timeline-analysis outputs/sample_tribe_timeline_analysis.json \
+  --output-prefix real_resume
+```
+
 Interpret the perception hypotheses and produce a suggestion report:
 
 ```bash
 python src/run_perception_interpretation.py \
   --input path/to/resume.pdf \
-  --features outputs/tribe_perception_hypotheses.json \
+  --features outputs/real_resume_tribe_perception_hypotheses.json \
   --model qwen3:14b \
   --target-role "AI backend engineer intern"
 ```

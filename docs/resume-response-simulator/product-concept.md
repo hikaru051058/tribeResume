@@ -2,27 +2,28 @@
 
 ## Core Idea
 
-The Resume Response Simulator predicts how different evaluators will perceive a resume or professional document before the user sends it.
+The current product is a TRIBE-inspired document perception simulator. It estimates how a resume or professional document may land as a timed stimulus before the user sends it.
 
 The product flow:
 
 ```text
 Resume/document upload
--> Parse text and layout
--> Extract structured candidate profile
--> Simulate reader personas
--> Evaluate first-pass reaction
--> Score confidence using evidence
--> Identify strong, weak, inflated, confusing, or missing signals
--> Suggest rewrites for target roles
--> Optionally compare multiple versions
+-> Parse text and section boundaries
+-> Build synthetic reading events
+-> Run real TRIBE v2 prediction or mock development signal
+-> Save per-segment statistics
+-> Map response segments to sections
+-> Extract salience/load/underemphasis proxy features
+-> Interpret proxy signals with evidence phrases
+-> Produce suggestion priorities
+-> Optionally compare with reviewer agents or controlled variants
 ```
 
 ## Reader-Response Simulator Framing
 
 A resume is not just a data file. It is a stimulus shown to a reader under time pressure. The first-pass response often determines whether the document gets deeper attention.
 
-The product treats the resume as something that creates different reactions depending on reader context:
+The core product treats the resume as a stimulus first. Reviewer-agent personas remain useful as optional semantic comparison:
 
 | Reader | Typical Question |
 | --- | --- |
@@ -53,66 +54,67 @@ Common weaknesses:
 - They do not track disagreement between reviewers.
 - They often produce advice that is reasonable but generic.
 
-## Why Simulated Evaluator Response Is More Useful
+## Why Perception Proxy Signals Are Useful
 
-A candidate does not only need to know whether a bullet is "good." They need to know how it lands.
+A candidate does not only need to know whether a bullet is "good." They need to know where the document may draw attention, where it may become dense, and whether important evidence may be buried.
 
 Examples:
 
-- A recruiter may like clear company names, scope, and skill keywords.
-- An engineering manager may care more about ownership, tradeoffs, reliability, and production impact.
-- An AI/ML reviewer may penalize vague claims like "used AI" without model details, data scale, metrics, or baselines.
-- A skeptical reviewer may flag unsupported leadership, inflated impact, or suspiciously broad claims.
-- An ATS parser may fail if dates, titles, or sections are formatted irregularly.
+- A section with high raw salience may dominate the first-pass signal.
+- A section with high position-normalized salience may remain prominent even after reducing early-section bias.
+- A section with high cognitive-load proxy may be dense, long, or hard to scan.
+- A section with high underemphasis proxy may contain strong evidence that is not surfacing clearly.
+- A controlled variant can test whether clearer wording changes proxy signals while preserving facts.
 
 The system is useful when it explains:
 
-- What each reader notices first.
-- What each reader trusts.
-- What each reader doubts.
-- What evidence supports the reaction.
-- How to rewrite the resume for a specific audience.
+- What the raw TRIBE-style output represents.
+- Which section-level proxy values drove each suggestion.
+- Which evidence phrases came from the resume section.
+- What cannot be concluded from the signal.
+- Which optional reviewer-agent findings agree or disagree.
 
 ## Example Output
 
 ```json
 {
-  "overall_response": "Mixed",
-  "first_impression": "Strong technical keywords, but impact claims are vague and several bullets read like task lists.",
-  "persona": "software_engineering_manager",
-  "strongest_signals": [
+  "metadata": {
+    "perception_source": "real_tribe",
+    "caution": "Real TRIBE checkpoint output from synthetic resume-reading events; no human was scanned."
+  },
+  "section_level_signals": [
     {
-      "signal": "Backend production experience",
-      "evidence": "Built REST APIs in Node.js and PostgreSQL for customer onboarding workflow"
+      "section": "experience",
+      "salience_proxy": 0.71,
+      "position_normalized_salience": 0.84,
+      "cognitive_load_proxy": 0.92,
+      "evidence_phrases": ["130,000+ reports", "~30% workload reduction", "3.4s inference latency"],
+      "suggestion": "Inspect whether the experience section packs too many metrics and technologies into single spans."
     }
   ],
-  "weak_or_confusing_signals": [
+  "suggestion_priorities": [
     {
-      "issue": "Impact is not quantified",
-      "evidence": "Improved system performance and user experience"
+      "priority": 1,
+      "section": "experience",
+      "reasoning": "Highest cognitive-load proxy plus dense technical evidence."
     }
-  ],
-  "credibility_risks": [
-    {
-      "risk": "Generic AI wording",
-      "evidence": "Implemented AI-powered solution for automation"
-    }
-  ],
-  "role_fit_score": 68,
-  "confidence": {
-    "score": 0.74,
-    "reason": "Most judgments are supported by cited lines, but the resume lacks enough project scale and outcome data."
-  }
+  ]
 }
 ```
 
-## Response Labels
+## Report Language
 
-| Label | Meaning |
-| --- | --- |
-| Great | Strong, credible, role-aligned, and clear under time pressure. |
-| Good | Solid fit with fixable gaps or moderate specificity issues. |
-| Mixed | Some strong signals, but the reader must work too hard or doubt key claims. |
-| Weak | Missing important evidence, unclear role fit, or low signal density. |
-| Bad | Confusing, unsupported, misaligned, or likely to be rejected quickly. |
+Reports should use cautious terms:
 
+- "may suggest"
+- "proxy signal"
+- "perception hypothesis"
+- "predicted response pattern"
+- "inspect this section"
+
+Reports should not say:
+
+- "this predicts hiring outcomes"
+- "this proves recruiter perception"
+- "this is measured brain activity"
+- "this section is objectively good or bad"

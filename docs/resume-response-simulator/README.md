@@ -1,29 +1,42 @@
 # Resume Response Simulator
 
+## Current Status
+
+This folder contains early product-planning notes. The current implemented direction has shifted: TRIBE v2 is the core experimental perception layer, Ollama reviewer agents are optional interpretation/comparison tools, and rewrite/patch tools are optional downstream experiments.
+
+For the current workflow, start with:
+
+- `docs/README.md`
+- `docs/tribe_core_architecture.md`
+- `docs/perception_report_workflow.md`
+- `docs/real_tribe_output_interpretation.md`
+
 ## One-Sentence Pitch
 
-A reader-response simulator for resumes that predicts how different evaluators will perceive a document before the candidate sends it.
+A document perception simulator for resumes that estimates how a document may land cognitively and semantically before the candidate sends it.
 
 ## Product Overview
 
-The Resume Response Simulator is not a normal resume checker. It is a structured simulation system that models how different readers respond to the same resume: a technical recruiter, software engineering manager, AI/ML reviewer, graduate admissions reviewer, skeptical reviewer, ATS parser, startup founder, or non-technical HR reader.
+The current product is not a normal resume checker and not primarily a multi-agent reviewer. It treats a resume as a timed text stimulus, runs TRIBE-style response prediction, extracts section-level proxy signals, and produces a cautious perception report.
+
+Reviewer personas such as technical recruiter, engineering manager, AI/ML reviewer, graduate admissions reviewer, skeptical reviewer, and ATS parser remain useful as optional comparison tools. They are not the core perception signal.
 
 The goal is to answer a practical question:
 
-> If this resume lands in front of the wrong or right reader, what reaction will it create in the first pass?
+> Which sections appear salient, dense, underemphasized, or worth inspecting before this document is sent?
 
-The product parses a resume, extracts a structured candidate profile, simulates evaluator personas, scores the strength of the response, cites exact resume evidence, and suggests targeted rewrites.
+The product parses a resume, builds synthetic reading events, runs real or mock TRIBE-style prediction, maps response proxies back to sections, cites resume evidence, and suggests inspection priorities. It does not claim actual perception, measured brain activity, resume quality, or hiring outcomes.
 
 ## Problem It Solves
 
 Most candidates do not need another generic list of resume tips. They need to know:
 
-- Whether the resume creates a great, good, mixed, weak, or bad response.
-- Which reader types will understand the value quickly.
+- Which sections may dominate or disappear in the first-pass signal.
+- Which sections may be dense or hard to scan.
 - Which claims feel credible, inflated, confusing, or unsupported.
 - Which resume lines create the strongest signal.
 - Which lines hurt trust or waste attention.
-- Whether a version is better for a specific role or program.
+- Whether controlled wording variants change proxy signals while preserving facts.
 
 ## Why This Is Different From Copy-Pasting Into ChatGPT Or Claude
 
@@ -31,13 +44,12 @@ Copy-pasting a resume into a general LLM is useful for one-off advice. It is als
 
 This system adds value only if it provides:
 
-- Structured evaluator personas instead of one generic assistant voice.
+- Real TRIBE-derived stimulus-response-like signals when available.
+- Section-level proxy rankings and timeline analysis.
 - Evidence-backed judgments tied to exact resume lines.
-- Repeatable rubrics and version tracking.
-- Confidence scoring based on evidence, not vibes.
-- Role-fit comparison against target job descriptions or admissions criteria.
-- Disagreement analysis between evaluator types.
-- Optional stimulus-response analysis for layout, density, attention, and cognitive load.
+- Separate confidence values for text review, perception signal, and fusion.
+- Optional reviewer-agent disagreement analysis.
+- Controlled variant experiments.
 
 For one personal resume review, ChatGPT or Claude may be enough. For a product, the differentiator must be repeatability, evidence, comparison, and calibrated reader simulation.
 
@@ -52,21 +64,18 @@ For one personal resume review, ChatGPT or Claude may be enough. For a product, 
 
 ## MVP Scope
 
-The MVP should focus on the core semantic product:
+The current implementation focuses on the perception-report product:
 
 - Resume upload and text extraction.
-- Structured candidate profile extraction.
-- Persona-based review agents.
-- Overall response label: Great, Good, Mixed, Weak, or Bad.
-- First-pass reaction summary.
-- Strongest and weakest signals.
-- Credibility risks.
-- Role-fit scoring.
-- Evidence-backed confidence score.
-- Bullet rewrite suggestions.
-- Basic version comparison.
+- Canonical TRIBE/neuralset text events.
+- Real TRIBE probe and dry-run diagnostics.
+- Per-segment prediction statistics.
+- Timeline-to-section mapping.
+- Salience, position-normalized salience, cognitive-load, and underemphasis proxies.
+- Human-readable perception reports.
+- Optional reviewer comparison, fusion, patch suggestions, and variant comparison.
 
-TRIBE v2-style analysis should not be in the MVP unless there is a clear experiment budget. It can be documented as an optional research layer.
+Mock mode is development-only. Real TRIBE mode is required for serious experimental reports, and even real mode remains a proxy because the inputs are synthetic reading events.
 
 ## Long-Term Vision
 
@@ -80,4 +89,3 @@ Long-term extensions:
 - Longitudinal tracking across application outcomes.
 - Calibrated scoring against real reviewer feedback.
 - Optional layout and attention modeling using stimulus-response techniques.
-

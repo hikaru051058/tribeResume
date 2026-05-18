@@ -8,7 +8,7 @@ For this product, the useful analogy is:
 
 > A resume can be treated as a stimulus that creates attention, salience, and cognitive-load effects in a reader.
 
-That framing may inspire optional experiments around document perception.
+That framing is now the core experimental perception layer. The current implementation maps resume text into synthetic Word/Text/Sentence events, runs or ingests TRIBE-style prediction output, and aggregates response proxies by section.
 
 ## What TRIBE V2 Is Not Good At
 
@@ -40,6 +40,15 @@ Resume judgment is semantic, contextual, and institutional. It depends on:
 TRIBE v2 does not model these criteria directly. A resume could be visually salient but professionally weak, or cognitively easy to read but poorly matched to the role.
 
 ## Possible Experimental Uses
+
+The current implemented uses are:
+
+- Synthetic resume-reading event generation.
+- Real TRIBE v2 prediction on canonical text events.
+- Compact per-segment prediction statistics.
+- Timeline-to-section mapping.
+- Section-level salience, position-normalized salience, cognitive-load proxy, and underemphasis proxy.
+- Controlled variant experiments that preserve facts while changing wording.
 
 ### Attention And Salience
 
@@ -102,4 +111,3 @@ TRIBE v2-style experiments could compare versions as stimuli:
 LLM agents, deterministic rules, and rubric scoring are better for semantic hiring or admissions judgment.
 
 TRIBE v2 may be useful for optional research around attention, salience, cognitive load, and document perception. It should not decide whether a resume is great, good, mixed, weak, or bad.
-

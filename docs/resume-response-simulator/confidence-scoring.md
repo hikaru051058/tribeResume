@@ -1,15 +1,29 @@
 # Confidence Scoring
 
+## Current Confidence Model
+
+The current system separates confidence by source:
+
+- `text_review_confidence`: confidence from optional Ollama reviewer-agent summaries.
+- `perception_signal_confidence`: confidence in the TRIBE/mock perception source.
+- `fusion_confidence`: confidence that reviewer-agent feedback and perception proxy signals point to the same inspection target.
+
+These values must not be collapsed into one objective score. Mock perception confidence is intentionally low because mock values are development/demo signals, not real TRIBE output.
+
 ## Definition
 
 Confidence measures how well-supported the system's judgment is. It is not the same as an LLM saying it feels confident.
 
+For perception reports, confidence means "how much trust to place in this source and aggregation," not "probability of hiring success."
+
 A high-confidence analysis means:
 
 - The resume parsed cleanly.
-- The evaluator cited exact evidence.
-- The rubric scores are internally consistent.
-- Multiple relevant personas agree.
+- The section boundaries and event mapping are inspectable.
+- Exact per-segment TRIBE statistics are available when using real TRIBE.
+- The report cites evidence phrases from the bounded section.
+- Optional evaluator agents cite exact evidence.
+- Fusion separates agreement from disagreement.
 - Required fields are present.
 - Major claims are supported.
 - Ambiguity and hallucination risk are low.
@@ -22,6 +36,8 @@ A high-confidence analysis means:
 | Evidence coverage | Share of judgments backed by exact resume lines. |
 | Rubric consistency | Whether scores align with written reasoning. |
 | Persona agreement | Whether relevant evaluators converge. |
+| Perception source | Whether signals are real TRIBE, mock, or approximate. |
+| Segment stability | Whether section-level statistics have enough segments and duration. |
 | Missing required fields | Penalty for missing dates, titles, skills, education, metrics, or target-role evidence. |
 | Ambiguity penalty | Penalty for vague claims, unclear ownership, or confusing wording. |
 | Unsupported claim penalty | Penalty for claims not supported by evidence. |
@@ -132,4 +148,3 @@ supported_claim_score = 1 - unsupported_claim_penalty
 | 0.55-0.74 | Medium | Useful analysis, but gaps affect certainty. |
 | 0.35-0.54 | Low | Parsing, evidence, or ambiguity issues are significant. |
 | 0.00-0.34 | Very low | Analysis should not be trusted without more input. |
-

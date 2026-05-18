@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The document parser lets the resume-response simulator accept common resume formats while keeping the downstream reviewer and TRIBE-stimulus scaffolds text-first.
+The document parser lets the system accept common resume formats while keeping the downstream perception pipeline text-first.
 
 Supported inputs:
 
@@ -84,13 +84,18 @@ Very short PDF extraction usually means the PDF may be scanned or image-based.
 
 ## Why Normalize Into Text First
 
-The current reviewer-agent layer works on resume text. Normalizing all formats into text keeps the MVP simple and testable:
+The current TRIBE path starts from timed text events. Normalizing all formats into text keeps the pipeline simple and testable:
 
 ```text
-PDF/DOCX/Markdown/TXT -> parsed text -> reviewer agents -> rewrite -> compare
+PDF/DOCX/Markdown/TXT
+-> parsed text
+-> synthetic reading events
+-> TRIBE v2 prediction or mock development signal
+-> section-level perception features
+-> perception report
 ```
 
-The TRIBE v2 scaffold also starts from text events, so text normalization is the right first step.
+Ollama reviewer agents, rewrite tools, patch tools, and comparison tools consume the same normalized text, but they are optional downstream layers.
 
 ## Limitations
 
@@ -123,5 +128,4 @@ Future layout-aware analysis could add:
 - ATS parse-risk scoring.
 - Optional TRIBE v2 stimulus-response experiments on rendered pages.
 
-TRIBE v2 should remain an optional stimulus-response layer, not a resume-quality judge.
-
+TRIBE v2 should remain a perception-simulation signal, not a resume-quality judge. OCR and layout-aware outputs should preserve the same caution.

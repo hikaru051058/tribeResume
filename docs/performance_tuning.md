@@ -1,5 +1,9 @@
 # Performance Tuning
 
+## Scope
+
+This page covers optional Ollama reviewer-agent performance. It does not describe the real TRIBE runtime path, which is dominated by text embedding and TRIBE prediction. For real TRIBE runtime and output inspection, see `real_tribe_probe.md` and `real_tribe_output_interpretation.md`.
+
 ## Local Benchmark Results
 
 Measured on the local fake sample resume with six reviewer agents:

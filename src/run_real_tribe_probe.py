@@ -6,6 +6,7 @@ import argparse
 import importlib.metadata
 import json
 import os
+import pickle
 import shutil
 import sys
 import time
@@ -31,6 +32,7 @@ DEFAULT_OUTPUT = ROOT / "outputs" / "real_tribe_prediction_raw.json"
 DEFAULT_SEGMENTS = ROOT / "outputs" / "real_tribe_segments_summary.json"
 DEFAULT_SEGMENT_STATS = ROOT / "outputs" / "real_tribe_segment_stats.json"
 DEFAULT_FULL_ARRAY = ROOT / "outputs" / "real_tribe_prediction_full.npz"
+DEFAULT_SEGMENT_OBJECTS = ROOT / "outputs" / "real_tribe_segments.pkl"
 DEFAULT_DIAGNOSTICS = ROOT / "outputs" / "real_tribe_probe_diagnostics.json"
 
 
@@ -44,6 +46,7 @@ def _prefixed_paths(prefix: str | None) -> dict[str, Path]:
             "segments": DEFAULT_SEGMENTS,
             "segment_stats": DEFAULT_SEGMENT_STATS,
             "full_array": DEFAULT_FULL_ARRAY,
+            "segment_objects": DEFAULT_SEGMENT_OBJECTS,
             "diagnostics": DEFAULT_DIAGNOSTICS,
         }
     outputs = ROOT / "outputs"
@@ -55,6 +58,7 @@ def _prefixed_paths(prefix: str | None) -> dict[str, Path]:
         "segments": outputs / f"{prefix}_real_tribe_segments_summary.json",
         "segment_stats": outputs / f"{prefix}_real_tribe_segment_stats.json",
         "full_array": outputs / f"{prefix}_real_tribe_prediction_full.npz",
+        "segment_objects": outputs / f"{prefix}_real_tribe_segments.pkl",
         "diagnostics": outputs / f"{prefix}_real_tribe_probe_diagnostics.json",
     }
 
@@ -90,6 +94,14 @@ def main() -> None:
         "--save-full-array",
         action="store_true",
         help="Also save the full prediction array as compressed NPZ.",
+    )
+    parser.add_argument(
+        "--save-segment-objects",
+        action="store_true",
+        help=(
+            "Also save raw TRIBE segment objects as a local pickle for plotting. "
+            "Do not commit this file."
+        ),
     )
     parser.add_argument(
         "--event-format",
@@ -134,6 +146,7 @@ def main() -> None:
         "text_model_override": args.text_model_override,
         "segment_stats_path": str(segment_stats_path),
         "save_full_array": args.save_full_array,
+        "save_segment_objects": args.save_segment_objects,
         "caution": (
             "This probe only tests whether TRIBE can produce an output from synthetic "
             "resume reading events. It does not judge resume quality, measure real brain "
@@ -207,6 +220,14 @@ def main() -> None:
         paths["segments"].write_text(
             json.dumps(_serialize_segments(segments), indent=2) + "\n", encoding="utf-8"
         )
+        if args.save_segment_objects and segments is not None:
+            paths["segment_objects"].parent.mkdir(parents=True, exist_ok=True)
+            with paths["segment_objects"].open("wb") as handle:
+                pickle.dump(segments, handle)
+            diagnostics["segment_objects_path"] = str(paths["segment_objects"])
+            diagnostics["segment_objects_warning"] = (
+                "Pickle files are local-only artifacts. Do not commit segment object pickles."
+            )
         diagnostics["segments_summary_path"] = str(paths["segments"])
         diagnostics["segment_stats_path"] = str(segment_stats_path)
         diagnostics["save_full_array"] = args.save_full_array

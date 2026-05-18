@@ -72,10 +72,12 @@ TRIBE v2 could be misrepresented as a resume judgment model.
 
 Mitigation:
 
-- Label it as optional and experimental.
-- Use it only for stimulus-response, attention, salience, density, or cognitive-load research.
+- Label it as core but experimental perception-simulation infrastructure.
+- Use it only for stimulus-response-like proxy signals, salience, density, or cognitive-load hypotheses.
 - Do not use it to produce hiring/admissions labels.
 - Compare it against simpler layout metrics before adding complexity.
+- Always state that real TRIBE output comes from synthetic reading events and that no human was scanned.
+- Keep mock mode clearly labeled as development/demo-only.
 
 ## Privacy Concerns
 
@@ -116,4 +118,3 @@ Mitigation:
 - Separate ATS parser feedback from human persona feedback.
 - Warn when keyword density creates credibility or readability issues.
 - Balance role-fit scoring with evidence and clarity.
-
