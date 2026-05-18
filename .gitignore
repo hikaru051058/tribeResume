@@ -1,0 +1,36 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environment and cache artifacts
+.env
+.env.*
+cache_probe/
+cache*/
+*.log
+
+# Generated outputs. Keep only the placeholder so the directory exists.
+outputs/*
+!outputs/.gitkeep
+
+# Local notebooks and external checkouts
+tribe_demo.ipynb
+tribev2/
+
+# Private local resumes/documents
+HIKARU_SHIMADA_FlowCV_Resume_2026-05-17.pdf
+*.pdf
+!docs/**/*.pdf
+
+# Large model and prediction artifacts
+*.ckpt
+*.safetensors
+*.pt
+*.pth
+*.npz

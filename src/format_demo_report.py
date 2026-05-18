@@ -1,0 +1,77 @@
+"""Format the final TRIBE resume perception demo report."""
+
+from __future__ import annotations
+
+
+def format_demo_report(data: dict) -> str:
+    """Render a polished demo summary from extracted report facts."""
+
+    full = data.get("full_resume", {})
+    variant = data.get("variant", {})
+    return "\n".join(
+        [
+            "# TRIBE Resume Perception Demo Report",
+            "",
+            "## One-Line Summary",
+            "A real TRIBE v2 checkpoint was used on synthetic resume-reading events to produce section-level perception proxy signals.",
+            "",
+            "## Important Caution",
+            "- No human was scanned.",
+            "- The input was represented as synthetic reading events.",
+            "- This is not a hiring prediction.",
+            "- This is not proof of resume quality.",
+            "- Section-level aggregation is a product proxy, not a native TRIBE label.",
+            "",
+            "## System Pipeline",
+            "```text",
+            "Resume PDF",
+            "-> canonical Word/Text/Sentence events",
+            "-> LLaMA 3.2 text features",
+            "-> TRIBE v2 prediction",
+            "-> per-segment stats",
+            "-> section mapping",
+            "-> perception report",
+            "```",
+            "",
+            "## Real Full-Resume Run",
+            f"- Prediction shape: `{full.get('prediction_shape', 'not available')}`",
+            f"- Retained segments: `{full.get('retained_segments', 'not available')}`",
+            f"- Exact per-segment stats: `{full.get('exact_stats', 'not available')}`",
+            f"- Approximation used: `{full.get('approximation_used', 'not available')}`",
+            f"- Highest raw salience section: `{full.get('highest_raw_salience', 'not available')}`",
+            f"- Highest cognitive-load section: `{full.get('highest_cognitive_load', 'not available')}`",
+            f"- Highest underemphasis section: `{full.get('highest_underemphasis', 'not available')}`",
+            "",
+            "Key interpretation:",
+            f"- {full.get('key_interpretation', 'The report identifies section-level proxy signals for inspection.')}",
+            "",
+            "## Controlled Variant Experiment",
+            "- Variant A: dense SEM-style bullet.",
+            "- Variant B: same facts split into clearer wording.",
+            f"- Facts preserved: `{variant.get('facts_preserved', 'not available')}`",
+            f"- Experience load delta: `{variant.get('experience_load_delta', 'not available')}`",
+            f"- Skills load spike warning: {variant.get('skills_warning', 'not available')}",
+            "",
+            "Interpretation:",
+            f"- {variant.get('interpretation', 'Variant results should be interpreted cautiously.')}",
+            "",
+            "## What This Means",
+            "- The pipeline is sensitive to wording and structure changes in controlled variants.",
+            "- The full-resume experience section appears dense or high-load under the current proxy aggregation.",
+            "- Clearer wording may reduce the target-section load proxy.",
+            "- Stability warnings matter because signal can shift into short sections or segment-boundary artifacts.",
+            "",
+            "## What This Does Not Mean",
+            "- It does not prove recruiters prefer one version.",
+            "- It does not measure actual perception.",
+            "- It does not validate resume quality.",
+            "- It does not replace human review.",
+            "",
+            "## Next Steps",
+            "- Run more controlled variants with one change at a time.",
+            "- Improve section mapping and inspect segment-boundary behavior.",
+            "- Optionally add brain-surface visualization later.",
+            "- Compare proxy reports with human reviewer feedback.",
+            "",
+        ]
+    )

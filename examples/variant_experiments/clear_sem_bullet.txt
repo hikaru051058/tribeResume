@@ -1,0 +1,15 @@
+Hikaru Shimada
+AI Backend Engineer Candidate
+
+EXPERIENCE
+
+SEM Medical Solutions - AI Systems Engineer
+- Developed and maintained a Dockerized AI-assisted medical reporting platform for internal clinical workflows.
+- Indexed 130,000+ reports into Elasticsearch semantic retrieval systems for AI-assisted report search and correction.
+- Built Bedrock-backed inference workflows with multilingual automation and operational monitoring.
+- Reduced report-processing workload by ~30%, saving ~2 hours per day and lowering re-report corrections from ~6 to ~1 per day.
+- Averaged ~3.4s inference latency across the reporting workflow.
+
+SKILLS
+
+Python, FastAPI, Docker, Elasticsearch, PostgreSQL, AWS Bedrock, semantic retrieval, inference pipelines, backend systems

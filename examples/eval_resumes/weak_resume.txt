@@ -1,0 +1,25 @@
+Taylor Morgan
+Software Developer
+taylor@example.com
+
+Education
+Metro College
+Computer Science classes
+
+Experience
+Developer, Local Business
+2024
+- Worked on website stuff.
+- Helped improve the app.
+- Did database tasks.
+- Worked with team members on various projects.
+
+Project
+Task Manager
+- Made a task app.
+- Used JavaScript and some backend tools.
+- Improved performance.
+
+Skills
+Coding, web, teamwork, communication
+

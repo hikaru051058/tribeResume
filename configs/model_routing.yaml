@@ -1,0 +1,38 @@
+fast:
+  default_model: llama3.1:8b
+
+balanced:
+  technical_recruiter: llama3.1:8b
+  ats_parser: llama3.1:8b
+  graduate_admissions_reviewer: llama3.1:8b
+  engineering_manager: qwen3:14b
+  ai_ml_reviewer: qwen3:14b
+  skeptical_reviewer: qwen3:14b
+
+deep:
+  default_model: qwen3:14b
+
+adaptive:
+  first_pass_model: llama3.1:8b
+  escalation_model: qwen3:14b
+  always_escalate:
+    - skeptical_reviewer
+  role_based_escalate:
+    engineering_manager:
+      - software
+      - backend
+      - AI
+      - ML
+      - data
+      - systems
+      - platform
+      - engineer
+    ai_ml_reviewer:
+      - AI
+      - ML
+      - machine learning
+      - LLM
+      - data science
+      - NLP
+      - computer vision
+      - research

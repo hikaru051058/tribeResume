@@ -1,0 +1,7 @@
+# Basic scaffold dependencies only.
+# TRIBE v2 is already installed locally from /Users/hikaru/tribev2.
+requests
+PyYAML
+pypdf
+python-docx
+pandas

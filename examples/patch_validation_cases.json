@@ -1,0 +1,62 @@
+{
+  "resume_text": "Experience\nSEM Medical Solutions\n- Dockerized AI-assisted medical reporting platform using Elasticsearch and PostgreSQL.\n- Built CI/CD workflows for clinical reporting deployments.\n\nArin Co., Ltd.\n- Built cosmetic and social recommendation platform that helped support seed funding discussions.\n- Reduced recommendation workload by 30% and saved approximately 2 hours per review cycle.\n\nProjects\nOpaque Hand\n- Built prosthetic hand gesture prototype using TensorFlow and SwiftUI/UIKit.\n\nNiftiq\n- Built blockchain ticketing prototype for event access control.\n\nSkills\nPython, FastAPI, PostgreSQL, Elasticsearch, Docker, TensorFlow, React, Next.js, SwiftUI/UIKit\n",
+  "cases": [
+    {
+      "name": "safe same-section patch",
+      "patch": {
+        "section": "SEM Medical Solutions",
+        "original_bullet": "Dockerized AI-assisted medical reporting platform using Elasticsearch and PostgreSQL.",
+        "proposed_bullet": "Dockerized an AI-assisted medical reporting platform using Elasticsearch and PostgreSQL to improve deployment consistency.",
+        "evidence_preserved": [
+          "Dockerized",
+          "AI-assisted medical reporting platform",
+          "Elasticsearch",
+          "PostgreSQL"
+        ],
+        "evidence_added_from_existing_context": [],
+        "evidence_removed": [],
+        "risk_level": "low",
+        "accept_recommendation": "accept"
+      }
+    },
+    {
+      "name": "unsafe Arin to medical reporting drift",
+      "patch": {
+        "section": "Arin Co., Ltd.",
+        "original_bullet": "Built cosmetic and social recommendation platform that helped support seed funding discussions.",
+        "proposed_bullet": "Built medical reporting platforms that helped support seed funding discussions.",
+        "evidence_preserved": [
+          "seed funding discussions"
+        ],
+        "evidence_added_from_existing_context": [
+          "medical reporting platform"
+        ],
+        "evidence_removed": [
+          "cosmetic and social recommendation platform"
+        ],
+        "risk_level": "low",
+        "accept_recommendation": "accept"
+      }
+    },
+    {
+      "name": "unsafe TensorFlow added to SEM",
+      "patch": {
+        "section": "SEM Medical Solutions",
+        "original_bullet": "Dockerized AI-assisted medical reporting platform using Elasticsearch and PostgreSQL.",
+        "proposed_bullet": "Dockerized a TensorFlow-powered AI-assisted medical reporting platform using Elasticsearch and PostgreSQL.",
+        "evidence_preserved": [
+          "Dockerized",
+          "AI-assisted medical reporting platform",
+          "Elasticsearch",
+          "PostgreSQL"
+        ],
+        "evidence_added_from_existing_context": [
+          "TensorFlow"
+        ],
+        "evidence_removed": [],
+        "risk_level": "low",
+        "accept_recommendation": "accept"
+      }
+    }
+  ]
+}

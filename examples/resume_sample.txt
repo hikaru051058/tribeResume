@@ -1,0 +1,35 @@
+Jordan Lee
+Software Engineering Student
+jordan.lee@example.com | github.com/jordanlee | linkedin.com/in/jordanlee
+
+Education
+State University, B.S. in Computer Science
+Expected May 2027
+Relevant coursework: Data Structures, Algorithms, Databases, Machine Learning, Operating Systems
+
+Experience
+Software Engineering Intern, Acme Health
+June 2025 - August 2025
+- Built backend API endpoints for a patient onboarding workflow using Python, FastAPI, and PostgreSQL.
+- Added integration tests for account setup and eligibility validation paths.
+- Worked with product and support teams to clarify edge cases in onboarding failures.
+
+Teaching Assistant, State University
+January 2025 - May 2025
+- Supported 80 students in an introductory programming course.
+- Held weekly office hours covering recursion, testing, debugging, and basic data structures.
+
+Projects
+Resume Insight Tool
+- Created a web app that parses resume text and highlights missing dates, weak verbs, and unsupported claims.
+- Implemented a simple scoring rubric for clarity, evidence, and role fit.
+
+Campus Route Planner
+- Built a shortest-path route planner for campus buildings using Python and NetworkX.
+- Added a small React interface for selecting start and destination points.
+
+Skills
+Languages: Python, JavaScript, TypeScript, SQL
+Frameworks: FastAPI, React, Node.js
+Tools: PostgreSQL, Git, Docker, Linux
+

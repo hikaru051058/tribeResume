@@ -1,0 +1,39 @@
+weak_resume:
+  expected_rating_range: ["Weak", "Mixed"]
+  expected_flags:
+    - vague bullets
+    - missing metrics
+    - unclear impact
+  should_not_claim:
+    - strong production experience
+    - strong AI evidence
+
+good_resume:
+  expected_rating_range: ["Good", "Mixed"]
+  expected_flags:
+    - some bullets can be stronger
+    - role targeting can improve
+  should_not_claim:
+    - no technical experience
+    - no measurable impact
+
+overclaimed_resume:
+  expected_rating_range: ["Mixed", "Weak"]
+  expected_flags:
+    - credibility risks
+    - unsupported claims
+    - vague scale
+  should_not_claim:
+    - strong verified AI evidence
+    - proven industry-leading benchmarks
+
+ats_bad_resume:
+  expected_rating_range: ["Mixed", "Weak"]
+  expected_flags:
+    - ATS readability issue
+    - formatting issue
+    - unclear section extraction
+  should_not_claim:
+    - ATS friendly formatting
+    - clear conventional section structure
+

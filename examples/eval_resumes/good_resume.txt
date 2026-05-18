@@ -1,0 +1,24 @@
+Riley Chen
+Software Engineering Intern
+riley.chen@example.com | github.com/rileychen
+
+Education
+State University, B.S. Computer Science
+Expected May 2027
+Coursework: Data Structures, Algorithms, Databases, Operating Systems
+
+Experience
+Backend Engineering Intern, Northstar Logistics
+June 2025 - August 2025
+- Built Flask API endpoints for shipment status updates used by internal support teams.
+- Reduced duplicate support lookups by 18% by adding a cached package-status summary endpoint.
+- Added pytest coverage for routing and status validation logic.
+
+Projects
+Course Planner
+- Built a React and PostgreSQL app for comparing course prerequisites and schedule conflicts.
+- Added import scripts for 1,200 course records from public catalog data.
+
+Skills
+Python, JavaScript, SQL, Flask, React, PostgreSQL, Git, Docker
+
